@@ -1,305 +1,283 @@
-# CRAG + Self-Reflective RAG Implementation
+<div align="center">
 
-Minimal FastAPI application demonstrating **Corrective RAG (CRAG)** and **Self-Reflective RAG** patterns without LangChain.
+# 🔮 Corrective + Self-Reflective RAG
 
-## Features
+### *Advanced Retrieval-Augmented Generation with Adaptive Intelligence*
 
-- **Document Processing**: Upload PDF, MD, TXT, JSON files
-- **Docling Integration**: HybridChunker for intelligent document chunking
-- **Vector Storage**: Qdrant for efficient similarity search
-- **CRAG**: Pre-generation relevance evaluation with web search fallback
-- **Self-Reflective RAG**: Post-generation grounding validation with iterative refinement
-- **Comparison Mode**: Side-by-side evaluation of all approaches
+[![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.6-009688.svg?logo=fastapi)](https://fastapi.tiangolo.com)
+[![Qdrant](https://img.shields.io/badge/Qdrant-Vector_DB-DC244C?logo=qdrant)](https://qdrant.tech)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai)](https://openai.com)
+[![uv](https://img.shields.io/badge/uv-Package_Manager-DE5FE9?logo=astral)](https://docs.astral.sh/uv/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Architecture
+<p align="center">
+  <i>🎯 Smart Document Retrieval • 🔍 Relevance Evaluation • 🌐 Web Search Fallback • ✨ Answer Validation</i>
+</p>
 
-### Corrective RAG (CRAG)
-1. Retrieve documents from vector store
-2. **Evaluate relevance** before generation (LLM-based grader)
-3. Route based on evaluation:
-   - **Relevant**: Use retrieved documents
-   - **Ambiguous**: Augment with web search (Tavily)
-   - **Irrelevant**: Replace with web search only
-4. Generate answer with optimal context
+[Features](#-features) • [Quick Start](#-quick-start) • [Architecture](#-architecture) • [API](#-api-endpoints) • [Workflows](#-workflows)
 
-### Self-Reflective RAG
-1. Retrieve documents from vector store
-2. Generate initial answer
-3. **Reflect on answer** to check grounding
-4. If not grounded:
-   - Refine query based on reflection
-   - Re-retrieve with refined query
-   - Generate again (up to max iterations)
-5. Return best grounded answer
+<br>
+
+```ascii
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   📚 Upload Documents  →  🔍 Vector Search  →  🤖 LLM Gen    ║
+║                                                              ║
+║   ✅ CRAG: Adaptive Web Search Based on Relevance           ║
+║   ✅ Self-Reflective: Iterative Answer Grounding            ║
+║   ✅ Both: Combined for Maximum Quality                     ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+</div>
 
 ---
 
-## 🚀 Quick Start with uv
+## ✨ Features
 
-This project uses [**uv**](https://docs.astral.sh/uv/) - the extremely fast Python package manager written in Rust.
+<table>
+<tr>
+<td width="50%">
+
+### 🎯 **CRAG Mode**
+- 📊 **LLM-based relevance evaluation**
+- 🌐 **Adaptive web search** (Tavily)
+- 🔀 **Smart routing** (relevant/ambiguous/irrelevant)
+- ⚡ **Real-time data access**
+
+</td>
+<td width="50%">
+
+### 🔍 **Self-Reflective Mode**
+- ✅ **Answer grounding validation**
+- 🔄 **Iterative query refinement**
+- 🎯 **Hallucination detection**
+- 📝 **Source attribution**
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🚀 **Both Mode**
+- 🔮 **CRAG + Self-Reflective combined**
+- 🏆 **Maximum quality assurance**
+- 🌐 **Web search preserved across iterations**
+- 🎓 **Production-ready accuracy**
+
+</td>
+<td width="50%">
+
+### 🛠️ **Core Capabilities**
+- 📄 **Multi-format support** (PDF, MD, TXT, JSON)
+- 🧩 **HybridChunker** (Docling integration)
+- 🗄️ **Qdrant vector storage**
+- 🔧 **Optional HYDE + Reranking**
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- [uv](https://docs.astral.sh/uv/getting-started/installation/) installed
-- Docker (for Qdrant)
-- OpenAI API key
-- Tavily API key
-
-### Installation & Setup
-
-1. **Clone and navigate to the project**:
 ```bash
-cd crag-reflective-rag
+✅ Python 3.12+
+✅ Docker (for Qdrant)
+✅ OpenAI API Key
+✅ Tavily API Key (for CRAG mode)
 ```
 
-2. **Configure environment**:
+### Installation in 3 Steps
+
 ```bash
+# 1️⃣ Install uv (ultra-fast package manager)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 2️⃣ Clone and setup
+git clone <repo-url>
+cd corrective_self_reflective_rag
 cp .env.example .env
-# Edit .env with your API keys:
-# - OPENAI_API_KEY
-# - TAVILY_API_KEY
+# Edit .env with your API keys
+
+# 3️⃣ Start services
+docker run -p 6333:6333 qdrant/qdrant  # Terminal 1
+uv run uvicorn app.main:app --reload   # Terminal 2
 ```
 
-3. **Start Qdrant** (in a separate terminal):
-```bash
-docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant
-```
-
-4. **Install dependencies and run**:
-```bash
-# uv automatically creates .venv and installs dependencies
-uv sync
-
-# Run the application
-uv run python -m app.main
-```
-
-The API will be available at: http://localhost:8000
-
-API docs at: http://localhost:8000/docs
+🎉 **Done!** API running at http://localhost:8000 • Docs at http://localhost:8000/docs
 
 ---
 
-## 📦 uv Commands Reference
+## 🏗️ Architecture
 
-### Development Workflow
+<div align="center">
 
-```bash
-# Install all dependencies (including dev)
-uv sync
+```mermaid
+graph LR
+    A[📤 User Query] --> B{Mode?}
+    B -->|Standard| C[🔍 Vector Search]
+    B -->|CRAG| D[📊 Relevance Check]
+    B -->|Self-Reflective| E[🔄 Iteration Loop]
+    B -->|Both| F[🔮 CRAG + Self-Reflective]
 
-# Install only production dependencies
-uv sync --no-dev
+    D -->|Irrelevant| G[🌐 Web Search]
+    D -->|Relevant| H[📚 Use Docs]
 
-# Add a new dependency
-uv add <package-name>
+    E --> I[✅ Grounding Check]
+    I -->|Score < 0.8| J[🔄 Refine Query]
 
-# Add a dev dependency
-uv add --dev <package-name>
+    C --> K[🤖 Generate Answer]
+    G --> K
+    H --> K
 
-# Remove a dependency
-uv remove <package-name>
-
-# Update lockfile after manual pyproject.toml changes
-uv lock
-
-# Run a command in the project environment
-uv run <command>
-
-# Run the FastAPI app with auto-reload
-uv run uvicorn app.main:app --reload
-
-# Run with specific host/port
-uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    style A fill:#e1f5e1
+    style K fill:#e1f5e1
+    style D fill:#fff4e6
+    style E fill:#e6f3ff
+    style F fill:#ffe6f3
 ```
 
-### Running Scripts & Tests
+</div>
 
-```bash
-# Run Python script
-uv run python script.py
+### 🎯 Mode Comparison
 
-# Run tests
-uv run pytest
-
-# Run with coverage
-uv run pytest --cov=app --cov-report=html
-
-# Run linting
-uv run ruff check .
-
-# Run type checking
-uv run mypy app/
-```
-
-### Managing Python Versions
-
-```bash
-# Pin Python version (creates .python-version file)
-uv python pin 3.12
-
-# List available Python versions
-uv python list
-
-# Install a specific Python version
-uv python install 3.12
-```
-
-### Virtual Environment
-
-uv automatically manages the virtual environment in `.venv/`. You don't need to activate it manually when using `uv run`, but you can if needed:
-
-```bash
-# Activate (traditional way)
-source .venv/bin/activate  # Linux/Mac
-.venv\Scripts\activate     # Windows
-
-# Deactivate
-deactivate
-```
+| Feature | Standard | CRAG | Self-Reflective | Both |
+|---------|----------|------|-----------------|------|
+| **Web Search** | ❌ | ✅ | ❌ | ✅ |
+| **Quality Validation** | ❌ | ❌ | ✅ | ✅ |
+| **Query Refinement** | ❌ | ❌ | ✅ | ✅ |
+| **Latency** | 🟢 Fast | 🟡 Medium | 🟠 Slow | 🔴 Slowest |
+| **Accuracy** | 🟡 Good | 🟢 Better | 🟢 Better | 🟢 Best |
+| **Use Case** | Simple Q&A | Current data | High accuracy | Production |
 
 ---
 
-## 📡 API Usage
+## 📡 API Endpoints
 
-### 1. Upload Document
+### 1️⃣ Upload Document
 
 ```bash
 curl -X POST "http://localhost:8000/upload/" \
-  -F "file=@path/to/document.pdf"
+  -F "file=@document.pdf"
 ```
 
-Response:
-```json
-{
-  "file_id": "uuid-here",
-  "filename": "document.pdf",
-  "file_type": "pdf",
-  "chunks_created": 45,
-  "status": "success",
-  "message": "Document processed successfully with 45 chunks"
-}
-```
+**Response:** ✅ Document processed → Chunks stored in Qdrant
 
-### 2. Query - Standard RAG
+### 2️⃣ Query (CRAG Mode)
 
 ```bash
 curl -X POST "http://localhost:8000/query/" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "What are the key findings?",
-    "mode": "standard",
-    "top_k": 5
-  }'
-```
-
-### 3. Query - CRAG Mode
-
-```bash
-curl -X POST "http://localhost:8000/query/" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "query": "What are the latest developments in AI?",
+    "query": "What is the weather today in New Delhi?",
     "mode": "crag",
     "top_k": 5
   }'
 ```
 
-Response includes:
-- Answer
-- Retrieved chunks
-- **CRAG evaluation** (relevance_score, routing decision)
-- Web search results (if triggered)
+**Returns:** Answer + Relevance Evaluation + Web Search Results (if triggered)
 
-### 4. Query - Self-Reflective Mode
+### 3️⃣ Query (Self-Reflective Mode)
 
 ```bash
 curl -X POST "http://localhost:8000/query/" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "Explain the methodology",
+    "query": "Explain the methodology in detail",
     "mode": "self_reflective",
     "top_k": 5
   }'
 ```
 
-Response includes:
-- Final answer (after reflection)
-- **Reflection details** (grounding score, iterations)
-- Sources used
+**Returns:** Refined Answer + Reflection Score + Iteration Count
 
-### 5. Query - Both CRAG + Self-Reflective
+### 4️⃣ Query (Both - Recommended)
 
 ```bash
 curl -X POST "http://localhost:8000/query/" \
   -H "Content-Type: application/json" \
   -d '{
-    "query": "What is the main conclusion?",
+    "query": "What are the latest AI developments?",
     "mode": "both",
-    "top_k": 5
+    "top_k": 5,
+    "enable_hyde": true,
+    "enable_reranking": true
   }'
 ```
 
-Combines both approaches for maximum quality.
+**Returns:** Maximum quality answer with CRAG + Self-Reflective validation
 
-### 6. Compare All Modes
+### 5️⃣ Compare All Modes
 
 ```bash
-curl "http://localhost:8000/query/compare?query=What%20are%20the%20key%20findings&top_k=5"
+curl "http://localhost:8000/query/compare?query=Your%20question&top_k=5"
 ```
 
-Returns side-by-side comparison of:
-- Standard RAG
-- CRAG
-- Self-Reflective RAG
+**Returns:** Side-by-side comparison of Standard, CRAG, and Self-Reflective
 
 ---
 
-## 🧪 Testing Strategy
+## 📊 Workflows
 
-### Test CRAG Routing
+Detailed Mermaid diagrams available in [`workflows/`](./workflows/):
 
-**Test with relevant documents**:
-```bash
-# Upload a document about "machine learning"
-curl -X POST "http://localhost:8000/upload/" -F "file=@ml_paper.pdf"
+- 🏗️ **[Project Architecture](./workflows/project_architecture.md)** - Complete system design
+- 🔄 **[CRAG Mode](./workflows/crag_mode.md)** - Adaptive web search workflow
+- 🔍 **[Self-Reflective Mode](./workflows/self_reflective_mode.md)** - Grounding validation workflow
+- 🚀 **[Both Mode](./workflows/both_mode.md)** - Combined pipeline workflow
 
-# Query about machine learning (should be "relevant")
-curl -X POST "http://localhost:8000/query/" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What is gradient descent?", "mode": "crag"}'
-```
-Expected: `relevance_label: "relevant"`, no web search
+---
 
-**Test with irrelevant query**:
-```bash
-# Query about something NOT in the document
-curl -X POST "http://localhost:8000/query/" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "What is the weather today?", "mode": "crag"}'
-```
-Expected: `relevance_label: "irrelevant"`, triggers Tavily web search
+## ⚙️ Configuration
 
-### Test Self-Reflective Refinement
+Key settings in `.env`:
 
 ```bash
-curl -X POST "http://localhost:8000/query/" \
-  -H "Content-Type: application/json" \
-  -d '{"query": "Tell me about the results", "mode": "self_reflective"}'
-```
-Expected: Multiple iterations, query refinement, improved final answer
+# 🤖 LLM Configuration
+OPENAI_API_KEY=sk-...
+LLM_MODEL=gpt-4o-mini
 
-### Run Automated Tests
+# 📊 CRAG Settings
+CRAG_RELEVANCE_THRESHOLD=0.7      # Relevant if score ≥ 0.7
+CRAG_AMBIGUOUS_THRESHOLD=0.5      # Irrelevant if score < 0.5
+TAVILY_API_KEY=tvly-...           # Web search
+
+# ✅ Self-Reflective Settings
+REFLECTION_MIN_SCORE=0.8          # Accept if grounding ≥ 0.8
+MAX_REFLECTION_RETRIES=2          # Max refinement iterations
+
+# 🗄️ Vector Database
+QDRANT_URL=http://localhost:6333
+QDRANT_COLLECTION_NAME=crag_documents
+
+# 🚀 Optional Features
+HYDE_ENABLED_BY_DEFAULT=false     # Query expansion
+RERANKING_ENABLED_BY_DEFAULT=false
+RERANKER_BACKEND=local            # or 'voyage'
+```
+
+---
+
+## 🧪 Testing
 
 ```bash
 # Run all tests
-uv run pytest
-
-# Run with verbose output
 uv run pytest -v
 
-# Run specific test file
-uv run pytest tests/test_crag.py
+# Test specific mode
+uv run python test_features.py
+
+# Test backend switching
+uv run python test_backends.py
+
+# With coverage
+uv run pytest --cov=app --cov-report=html
 ```
 
 ---
@@ -307,137 +285,74 @@ uv run pytest tests/test_crag.py
 ## 📁 Project Structure
 
 ```
-crag-reflective-rag/
-├── app/
-│   ├── __init__.py
-│   ├── main.py                 # FastAPI entry point
-│   ├── config.py               # Pydantic settings
-│   ├── models.py               # Pydantic schemas
-│   ├── api/
-│   │   ├── __init__.py
-│   │   ├── upload.py           # Document upload endpoints
-│   │   └── query.py            # Query endpoints
-│   ├── core/
-│   │   ├── __init__.py
-│   │   └── retrieval.py        # Retrieval service
-│   └── services/
-│       ├── __init__.py
-│       ├── llm_service.py      # OpenAI LLM
-│       ├── embedding_service.py # OpenAI embeddings
-│       ├── vector_store.py     # Qdrant operations
-│       ├── document_processor.py # Docling chunking
-│       ├── web_search.py       # Tavily integration
-│       ├── crag.py             # CRAG logic
-│       └── self_reflective.py  # Self-Reflective RAG logic
-├── uploads/                    # File storage (gitignored)
-├── .venv/                      # Virtual environment (gitignored, managed by uv)
-├── .python-version             # Python version pin (3.12)
-├── pyproject.toml             # Project config & dependencies
-├── uv.lock                    # Lockfile (generated by uv)
-├── .env                       # Environment variables (gitignored)
-├── .env.example               # Environment template
-├── .gitignore
-└── README.md                  # This file
+corrective_self_reflective_rag/
+├── 📱 app/
+│   ├── api/              # 🚀 FastAPI endpoints
+│   ├── core/             # 🔧 Core business logic
+│   ├── services/         # 🛠️ Service implementations
+│   ├── config.py         # ⚙️ Settings
+│   └── models.py         # 📊 Pydantic schemas
+├── 📚 workflows/         # 📖 Architecture docs + Mermaid diagrams
+├── 📂 uploads/           # 📄 Document storage
+├── 🧪 tests/            # ✅ Test suite
+├── .env.example          # 🔐 Config template
+├── pyproject.toml        # 📦 Dependencies
+└── CLAUDE.md            # 📘 Full documentation
 ```
 
 ---
 
-## ⚙️ Key Implementation Details
+## 🎓 Learn More
 
-### Metadata Richness
+### 📚 Research Papers
 
-Every chunk includes:
-- Document structure (page, heading, hierarchy)
-- Content metrics (tokens, characters)
-- Processing info (chunk method, timestamps)
-- Extracted keywords
+- **CRAG**: [Corrective Retrieval Augmented Generation](https://arxiv.org/abs/2401.15884)
+- **Self-Reflective RAG**: [Self-RAG: Learning to Retrieve, Generate, and Critique](https://arxiv.org/abs/2310.11511)
 
-### CRAG Evaluation
+### 🛠️ Technology Stack
 
-Uses LLM-as-judge with structured JSON output:
-```python
-{
-  "relevance_score": 0.87,
-  "relevance_label": "relevant",  # relevant/ambiguous/irrelevant
-  "confidence": 0.92
-}
-```
-
-Thresholds (configurable in `.env`):
-- `relevant`: score >= 0.7
-- `ambiguous`: 0.4 <= score < 0.7
-- `irrelevant`: score < 0.4
-
-### Self-Reflective Validation
-
-Post-generation grounding check:
-```python
-{
-  "answer_grounded": true,
-  "hallucination_detected": false,
-  "reflection_score": 0.95,
-  "sources_cited": ["chunk_005", "chunk_007"]
-}
-```
-
-If `reflection_score < 0.8`, refine query and retry (up to 2 iterations).
+- **Framework**: [FastAPI](https://fastapi.tiangolo.com) - Modern Python API framework
+- **Vector DB**: [Qdrant](https://qdrant.tech) - High-performance vector search
+- **LLM**: [OpenAI GPT-4](https://openai.com) - Language model
+- **Document Processing**: [Docling](https://github.com/DS4SD/docling) - PDF/MD parsing
+- **Web Search**: [Tavily](https://tavily.com) - AI search API
+- **Package Manager**: [uv](https://docs.astral.sh/uv/) - Ultra-fast Python package manager
 
 ---
 
-## 🛠️ Troubleshooting
+## 🤝 Contributing
 
-### Qdrant Connection Error
-```
-Error: Connection refused to localhost:6333
-```
-Solution: Start Qdrant with Docker:
-```bash
-docker run -p 6333:6333 qdrant/qdrant
-```
-
-### OpenAI API Error
-```
-Error: Invalid API key
-```
-Solution: Check `.env` file has correct `OPENAI_API_KEY`
-
-### uv not found
-```
-command not found: uv
-```
-Solution: Install uv:
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-### Empty Retrieval Results
-```
-404: No relevant documents found
-```
-Solution: Upload documents first using `/upload/` endpoint
-
----
-
-## 📝 Next Steps
-
-This implementation provides a solid foundation. Consider adding:
-
-1. **Evaluation Framework**: Integrate RAGAS/DeepEval for systematic evaluation
-2. **Hybrid Search**: Combine dense + sparse (BM25) retrieval
-3. **Reranking**: Add cross-encoder reranking post-retrieval
-4. **Streaming**: Add streaming support for real-time responses
-5. **Caching**: Implement prompt caching for repeat queries
-6. **Authentication**: Add API key authentication
-7. **Database**: Persist metadata in PostgreSQL alongside Qdrant
+Contributions welcome! Please check out:
+- 📘 [CLAUDE.md](./CLAUDE.md) - Complete development guide
+- 🏗️ [Architecture Docs](./workflows/project_architecture.md) - System design
+- ✅ [Testing Guide](./workflows/README.md) - Test strategy
 
 ---
 
 ## 📄 License
 
-MIT License - feel free to use for educational purposes!
+MIT License - See [LICENSE](LICENSE) for details
 
 ---
 
-Built for demonstrating CRAG and Self-Reflective RAG patterns in production-ready architecture.
+## 🙏 Acknowledgments
 
-**Powered by [uv](https://docs.astral.sh/uv/) ⚡ - The fast Python package manager**
+Built with inspiration from cutting-edge RAG research and powered by:
+- 🤖 OpenAI for LLM capabilities
+- 🗄️ Qdrant for vector search excellence
+- 📚 Docling for document intelligence
+- 🌐 Tavily for web search integration
+
+---
+
+<div align="center">
+
+### ⚡ Powered by [uv](https://docs.astral.sh/uv/) - The Fast Python Package Manager
+
+**Built for demonstrating advanced RAG patterns in production-ready architecture**
+
+🌟 **Star this repo if you find it useful!** 🌟
+
+[Report Bug](https://github.com/your-repo/issues) • [Request Feature](https://github.com/your-repo/issues) • [Documentation](./CLAUDE.md)
+
+</div>
