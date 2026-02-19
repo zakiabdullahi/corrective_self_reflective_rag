@@ -47,6 +47,10 @@ uploads/
 !README.md
 *.txt
 *.json
+!Dockerrun.aws.json
+
+# Git worktrees
+.worktrees/
 
 # Logs
 *.log
