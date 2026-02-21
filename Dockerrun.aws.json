@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/crag-rag-app:latest",
+    "Name": "685057748560.dkr.ecr.us-east-1.amazonaws.com/crag-rag-app:latest",
     "Update": "true"
   },
   "Ports": [

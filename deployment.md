@@ -147,7 +147,7 @@ This creates `.elasticbeanstalk/config.yml` (already gitignored).
 # Single-instance mode (no load balancer — simplest, ~$62/mo)
 eb create crag-rag-prod \
     --instance-type t3.large \
-    --single-instance
+    --single
 
 # OR with load balancer + auto-scaling (production-grade, ~$78/mo+)
 eb create crag-rag-prod \

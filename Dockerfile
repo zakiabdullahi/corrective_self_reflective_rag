@@ -4,7 +4,8 @@
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim AS builder
 
 ENV UV_COMPILE_BYTECODE=1 \
-    UV_LINK_MODE=copy
+    UV_LINK_MODE=copy \
+    UV_TORCH_BACKEND=cpu
 
 WORKDIR /app
 
@@ -19,12 +20,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Two-pass uv sync for maximum layer caching:
 # Pass 1 — install only project dependencies (no project source) so this layer is
 #           cached as long as pyproject.toml/uv.lock don't change.
-COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev --no-install-project
+COPY pyproject.toml ./
+RUN touch uv.lock
+COPY uv.lock* ./
+RUN uv sync --no-dev --no-install-project
 
 # Pass 2 — install the project itself (invalidated only when source changes)
+COPY README.md ./
 COPY app/ ./app/
-RUN uv sync --frozen --no-dev
+RUN uv sync --no-dev
 
 # Pre-download the cross-encoder reranker model at build time so there is
 # no HuggingFace network call at container startup.
