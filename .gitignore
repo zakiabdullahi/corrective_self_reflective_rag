@@ -75,3 +75,6 @@ archived/*
 workflows/README.md
 .claude/*
 tests/*
+
+.worktrees/*
+.worktrees/deploy-aws-eb
