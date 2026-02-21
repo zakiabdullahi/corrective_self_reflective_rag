@@ -76,5 +76,5 @@ workflows/README.md
 .claude/*
 tests/*
 
-.worktrees/*
-.worktrees/deploy-aws-eb
+# .worktrees/*
+# .worktrees/deploy-aws-eb
