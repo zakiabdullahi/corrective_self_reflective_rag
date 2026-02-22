@@ -7,7 +7,7 @@ on:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: crag-rag-app
-  EB_APP_NAME: crag-rag-app
+  EB_APP_NAME: crag-rag-appp
   EB_ENV_NAME: crag-rag-prod
 
 jobs:
