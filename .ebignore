@@ -3,3 +3,14 @@
 # Including Dockerfile causes EB's parser to misread Python "from" imports as
 # Docker FROM instructions, breaking the image-pull step.
 Dockerfile
+
+.git
+.github
+.gitignore
+venv
+.venv
+__pycache__
+*.zip
+*.tar.gz
+node_modules
+qdrant_storage
