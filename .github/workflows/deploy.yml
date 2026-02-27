@@ -38,7 +38,17 @@ jobs:
             -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      - name: Debug Secrets
+        run: |
+          echo "Checking secrets..."
 
+          echo "OPENAI_API_KEY set: $([ -n "$OPENAI_API_KEY" ] && echo YES || echo NO)"
+          echo "TAVILY_API_KEY set: $([ -n "$TAVILY_API_KEY" ] && echo YES || echo NO)"
+          echo "QDRANT_URL set: $([ -n "$QDRANT_URL" ] && echo YES || echo NO)"
+          echo "QDRANT_API_KEY set: $([ -n "$QDRANT_API_KEY" ] && echo YES || echo NO)"
+          echo "RERANKER_BACKEND set: $([ -n "$RERANKER_BACKEND" ] && echo YES || echo NO)"
+          echo "UPLOAD_DIR set: $([ -n "$UPLOAD_DIR" ] && echo YES || echo NO)"
+      
       - name: Deploy to Elastic Beanstalk
         env:
           IMAGE_TAG: ${{ github.sha }}

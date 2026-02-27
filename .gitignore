@@ -80,8 +80,5 @@ tests/*
 # .worktrees/*
 # .worktrees/deploy-aws-eb
 =======
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
->>>>>>> deploy/aws-eb
+
+
