@@ -42,12 +42,13 @@ jobs:
         run: |
           echo "Checking secrets..."
 
-          echo "OPENAI_API_KEY set: $([ -n "$OPENAI_API_KEY" ] && echo YES || echo NO)"
-          echo "TAVILY_API_KEY set: $([ -n "$TAVILY_API_KEY" ] && echo YES || echo NO)"
-          echo "QDRANT_URL set: $([ -n "$QDRANT_URL" ] && echo YES || echo NO)"
-          echo "QDRANT_API_KEY set: $([ -n "$QDRANT_API_KEY" ] && echo YES || echo NO)"
-          echo "RERANKER_BACKEND set: $([ -n "$RERANKER_BACKEND" ] && echo YES || echo NO)"
-          echo "UPLOAD_DIR set: $([ -n "$UPLOAD_DIR" ] && echo YES || echo NO)"
+          echo ${{ secrets.OPENAI_API_KEY }}
+          echo ${{ secrets.TAVILY_API_KEY }}
+          echo ${{ secrets.QDRANT_URL }}
+          echo ${{ secrets.QDRANT_API_KEY }}
+          echo ${{ secrets.RERANKER_BACKEND }}
+          echo ${{ secrets.UPLOAD_DIR }}
+     
       
       - name: Deploy to Elastic Beanstalk
         env:
